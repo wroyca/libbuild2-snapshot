@@ -1,0 +1,5 @@
+: 1
+location: libbuild2-snapshot/
+
+:
+location: libbuild2-snapshot-tests/

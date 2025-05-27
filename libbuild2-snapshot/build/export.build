@@ -1,0 +1,6 @@
+$out_root/
+{
+  include libbuild2/snapshot/
+}
+
+export $out_root/libbuild2/snapshot/$import.target

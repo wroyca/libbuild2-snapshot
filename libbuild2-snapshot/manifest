@@ -1,0 +1,13 @@
+: 1
+name: libbuild2-snapshot
+tests: * libbuild2-snapshot-tests
+version: 0.1.0-a.0.z
+language: c++
+summary: build2 module for automatic Git snapshots
+license: MIT ; MIT License.
+description-file: README.md
+url: https://github.com/wroyca/libbuild2-snapshot
+email: wroy@proton.me
+# build-error-email: wroy@proton.me
+depends: * build2 >= 0.17.0
+depends: * bpkg >= 0.17.0

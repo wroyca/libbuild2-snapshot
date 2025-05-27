@@ -1,0 +1,7 @@
+using snapshot
+
+libs =
+
+exe{basics}: {hxx ixx txx cxx}{**} $libs
+
+cxx.poptions =+ "-I$out_root" "-I$src_root"
