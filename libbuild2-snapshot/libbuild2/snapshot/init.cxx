@@ -2,6 +2,8 @@
 
 #include <libbuild2/diagnostics.hxx>
 
+#include <libbuild2/snapshot/rule.hxx>
+
 using namespace std;
 
 namespace build2
@@ -10,12 +12,23 @@ namespace build2
   {
     bool
     init (scope&,
-          scope&,
+          scope& bs,
           const location& l,
-          bool,
+          bool first,
           bool,
           module_init_extra&)
     {
+      tracer trace ("snapshot::init");
+
+      if (!first)
+        fail (l) << "multiple snapshot module initializations";
+
+      const auto& s (snapshot_rule::instance);
+
+      // Register rules.
+      //
+      bs.insert_rule<exe> (perform_update_id, "snapshot", s);
+
       return true;
     }
 
