@@ -2,9 +2,44 @@
 
 The `libbuild2-snapshot` build2 module automatically creates Git snapshots of your project state during the build process. It captures both the current index state and working tree changes, storing them as permanent Git references.
 
+## Why is it?
+
+You're working on a new feature. Halfway through, the build starts failing.
+You've made several changes, some staged, some still in your working directory,
+and you haven't committed anything yet. You try to backtrack but can't recall
+exactly what state things were in when it last worked.
+
+Because `libbuild2-snapshot` is enabled, a snapshot was automatically recorded
+during the last successful build. It captures both the index and the working
+directory as they were at that moment. You check out the snapshot, rebuild, and
+confirm the issue wasn't present. From there, it's straightforward to diff,
+test, and narrow down what changed.
+
+Even outside of debugging, snapshots are useful while developing. You can move
+quickly, make changes freely, and rely on each build to preserve the context.
+There's no need to interrupt your workflow with temporary commits just to save a
+known-good state.
+
+When refactoring or updating dependencies, having a snapshot gives you a way to
+roll back without having to reset or undo anything manually. You simply return
+to the build as it was.
+
+And because every snapshot records exactly what was built, including uncommitted
+edits, you can go back and see not just what changed, but what effect it had,
+without guessing or reconstructing after the fact.
+
 ## What is it?
 
-This module integrates with build2's build system to automatically snapshot your Git repository state whenever an executable target is updated. Snapshots are stored as Git references under `refs/build2/snapshot/`:
+That kind of recovery is possible because `libbuild2-snapshot` ties directly
+into the build2 build system. It monitors your builds and automatically records
+a snapshot of the Git repository state whenever an executable target is updated.
+
+Each snapshot captures exactly what was in your index and working directory at
+build time, and stores it as a Git reference under `refs/build2/snapshot/`. This
+includes both committed and uncommitted changes, so you always have an exact
+record of what was built.
+
+Here's what that looks like in a typical repository:
 
 ```
 .
