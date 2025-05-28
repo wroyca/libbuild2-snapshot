@@ -2,8 +2,6 @@
 
 The `libbuild2-snapshot` build2 module automatically creates Git snapshots of your project state during the build process. It captures both the current index state and working tree changes, storing them as permanent Git references.
 
-![Screenshot From 2025-05-27 20-16-02](https://raw.githubusercontent.com/wroyca/libbuild2-snapshot/refs/heads/main/.github/01.png)
-
 ## Why is it?
 
 You're working on a new feature. Halfway through, the build starts failing.
