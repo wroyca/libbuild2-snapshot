@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libbuild2/snapshot/rule.hxx>
+#include <libbuild2/snapshot/git.hxx>
 
 #include <libbuild2/target.hxx>
 #include <libbuild2/algorithm.hxx>
@@ -30,6 +31,13 @@ namespace build2
         });
 
         target_state ts = straight_execute_prerequisites (a, t);
+
+        if (ts == target_state::changed || ts == target_state::unchanged)
+        {
+          auto r (git_repository{});
+
+          r.snapshot (t.name + " snapshot");
+        }
 
         return ts;
       }
@@ -68,14 +76,8 @@ namespace build2
         trace << "for target: " << t.name << " with action: " << a;
       });
 
-      switch (a)
-      {
-      case perform_update_id:
-        return &perform_update;
-      default:
-        assert (false);
-        return default_recipe;
-      }
+
+      return &perform_update;
     }
   }
 }
