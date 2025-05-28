@@ -477,6 +477,15 @@ namespace build2
         refs_.generate_timestamped_ref (config.ref_prefix + "/wtree");
       refs_.update_reference (ref_name, stash_hash);
 
+      // Restore the working tree state from the stash.
+      //
+      // After capturing the working tree state in a permanent reference, we
+      // restore the original working tree state so that we can continue working
+      // normally.
+      //
+      executor_.execute ({"stash", "apply", "stash@{0}"});
+      l5 ([&] { trace << "working tree restored from stash"; });
+
       // Remove the transient stash entry.
       //
       // After promoting the stash to a permanent reference, we drop the
@@ -484,10 +493,10 @@ namespace build2
       // clean stash stack. This operation is non-fatal; if it fails (e.g., due
       // to race conditions or prior deletion), we proceed regardless.
       //
-      if (!executor_.try_execute ({"stash", "drop", "stash@{0}"}))
-      {
-        warn << "failed to drop stash, continuing with snapshot";
-      }
+      optional<string> stash_drop =
+        executor_.execute_optional ({"stash", "drop", "stash@{0}"});
+      if (!stash_drop || stash_drop->empty())
+        l5 ([&] { trace << "failed to drop stash, continuing with snapshot"; });
 
       return ref_name;
     }
